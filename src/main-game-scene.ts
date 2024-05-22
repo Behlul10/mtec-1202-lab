@@ -4,7 +4,6 @@ export default class Scene extends Phaser.Scene {
     constructor(){
         super({key : 'main-game-scene'})
     }
-    container : Phaser.GameObjects.Container;
     container2 : Phaser.GameObjects.Container;
     container3 : Phaser.GameObjects.Container;
 
@@ -57,35 +56,23 @@ export default class Scene extends Phaser.Scene {
             console.log('Gear')
             this.container2.x = dragX;
             this.container2.y = dragY;
+
+            
+             // Check if the gear is within the bounds of the UFO container
+             if (Phaser.Geom.Intersects.RectangleToRectangle(
+                this.container2.getBounds(), 
+                this.container3.getBounds()
+            )) {
+                console.log('Gear is inside UFO');
+                this.container3.add(this.container2);
+            }
+           
         });
 
         this.container2.on('pointerdown', (pointer, dragX, dragY) => {
             console.log('click')
         });
-
-
-        //enemy
-        const enemyImage = this.physics.add.image(0, 0, 'enemy');
-        
-        enemyImage.setScale(0.3)
-        console.log(enemyImage.displayWidth, enemyImage.displayHeight);
-        this.container = this.add.container() as Phaser.GameObjects.Container
-        this.container.add([ enemyImage ]);
-        this.container.setSize(enemyImage.displayWidth, enemyImage.displayHeight);
-        this.container.setInteractive({ draggable: true });
-
-
-
-        this.container.on('drag', (pointer, dragX, dragY) => {
-            console.log('enemy')
-            this.container.x = dragX;
-            this.container.y = dragY;
-        });
-
-        this.container.on('pointerdown', (pointer, dragX, dragY) => {
-            console.log('click')
-        });
-
+    
 //TEXT
     let DragText = this.add.text(0, 375, '', { 
         fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', 
