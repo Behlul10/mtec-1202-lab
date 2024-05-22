@@ -2,7 +2,7 @@
 
 import Phaser from 'phaser'
 
-export default class Preloader extends Phaser.Scene {
+export default class StartMenu extends Phaser.Scene {
     constructor(){
         super({key : 'start-menu'})
     }
@@ -15,12 +15,13 @@ export default class Preloader extends Phaser.Scene {
         const halfHeight = mainCameraHeight / 2;
         const halfWidth = mainCameraWidth / 2;
 
-        const backgroundImage = this.add.image(halfWidth, halfHeight, 'start-menu-bg');
-        const startButton = this.add.image(halfWidth, halfHeight, 'start-button');
+        const backgroundImage = this.add.image(halfWidth, halfHeight, 'background');
+        const startButton = this.add.image(halfWidth, halfHeight, 'StartButton');
 
-        //add background music
-        //decrease volume
-        //loop it
+
+        const music: Phaser.Sound.BaseSound = this.sound.add('BackgroundMusic');
+    //play music
+        music.play({ loop: true, volume: 0.1 });
 
         backgroundImage.setOrigin(.5, .5);
         backgroundImage.setScale(1.5, 1.5);
@@ -31,10 +32,13 @@ export default class Preloader extends Phaser.Scene {
 
         startButton.on('pointerover', function(){startButton.setTint(0xf0ff00);})
         startButton.on('pointerout', function(){startButton.setTint(0xffffff);})
+        startButton.on('pointerdown', () => {
+            // Navigate to the main game
+            const thisScene = this.scene;
 
-        startButton.on('pointerdown', function(){
-            //navigate to the main game
-        })
+                thisScene.start('main-game-scene');
+
+        });
     }
 
     update()
